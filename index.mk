@@ -1,6 +1,6 @@
 $(register-npm-bin)
 
-~this-module-dir := $(~module-dir) # store this so it's available in rules
+~this-module-dir := $(~module-dir)
 
 define ~fait-macro-data-args
 $(patsubst %, -f %, $(call filter-match,.json, $(1)))
@@ -16,6 +16,6 @@ endef
 
 # Generate an intermediate json file of makefile variables by exporting the names
 # found in the Handlebars template
-%.mk.json: %.hbs $(MAKEFILE_LIST)
+%.mk.json: %.hbs $$(call filter-out-match,$$*.mk, $(MAKEFILE_LIST))
 	$(call export-variables, $(shell $(~this-module-dir)handlevars.js $<))
 	env-vars-to-json > $@
